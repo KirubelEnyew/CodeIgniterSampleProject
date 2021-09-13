@@ -7,9 +7,9 @@
     <body class = "white">
     <nav class = "grey lighten-10">
     <div class="container">
-        <a href="#" class="brand-logo">Home</a>
+        <?= anchor('PizzaController/getPizzas','Home','class="brand-logo"'); ?>
         <ul class="right">
-            <li><a href="#" class="btn">Add Pizza</a></li>
+        <?= anchor('PizzaController/viewLoader/add','Add Pizza','class="btn"'); ?>
         </ul>
     </div>
-    </nav> 
+    </nav>
