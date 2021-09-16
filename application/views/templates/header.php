@@ -9,7 +9,7 @@
     <div class="container">
         <?= anchor('PizzaController/getPizzas','Home','class="brand-logo"'); ?>
         <ul class="right">
-        <?= anchor('PizzaController/viewLoader/add','Add Pizza','class="btn"'); ?>
+        <?= anchor('PizzaController/addPizza','Add Pizza','class="btn"'); ?>
         </ul>
     </div>
     </nav>

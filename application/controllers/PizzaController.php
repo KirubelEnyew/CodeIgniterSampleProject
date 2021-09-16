@@ -1,46 +1,17 @@
 <?php
-
-class PizzaController extends CI_Controller
+require APPPATH . '/core/My_view_loader.php';
+class PizzaController extends My_View_Loader
 {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("pizzaModel");
-        $this->load->helper('form');
-        $this->load->library('form_validation');
+        $this->load->library('validationlibrary');
+        $this->load->model('pizzaModel');
     }
-
-    public function index()
-    {
-        echo "hgsfdshdfkjdsgkfjs";
-    }
-
-    function viewLoader($viewName)
-    {
-        $this->load->view("templates/header");
-        $this->load->view("$viewName");
-        $this->load->view("templates/footer");
-    }
-    function defualtView($gtn = null)
-    {
-
-        if (!is_null($gtn)) {
-            $this->load->view("templates/header");
-            $this->load->view('pizzas', $gtn);
-            $this->load->view("templates/footer");
-        } else
-            $this->load->view('templates/header');
-    }
-
     function getPizzas()
     {
         $data['modelReturn'] = $this->pizzaModel->fetchData();
-        $this->defualtView($data);
-    }
-    function validator()
-    {
-        $this->form_validation->set_rules('pizzaName', 'PizzaName', 'required|alpha');
-        $this->form_validation->set_rules('ingredients', 'Ingredients', 'required|alpha_numeric_spaces');
+        $this->loaderFunction('pizzas',$data);
     }
     function addPizza()
     {
@@ -48,11 +19,9 @@ class PizzaController extends CI_Controller
         $newName = $this->input->post('pizzaName');
         $newIngredients = $this->input->post('ingredients');
         $queryTerm = "INSERT INTO pizzas_table (pizzaName,ingredients) VALUES ('$newName','$newIngredients')";
-        $this->validator();
+        $this->validationlibrary->validator();
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header');
-            $this->load->view('add');
-            $this->load->view('templates/footer');
+            $this->loaderFunction('add');
         } else {
             $this->pizzaModel->executeQuery($queryTerm);
             $this->getPizzas();
@@ -60,7 +29,7 @@ class PizzaController extends CI_Controller
     }
     function deletePizza()
     {
-        $id=$this->input->post('id');
+        $id = $this->input->post('id');
         $queryTerm = "DELETE FROM pizzas_table WHERE id=$id";
         $this->pizzaModel->executeQuery($queryTerm);
         $this->getPizzas();
@@ -72,12 +41,9 @@ class PizzaController extends CI_Controller
         $name = $this->input->post('pizzaName');
         $ingredients = $this->input->post('ingredients');
         $queryTerm = "UPDATE pizzas_table SET pizzaName='$name',ingredients='$ingredients' WHERE id=$idToEdit";
-        $this->validator();
+        $this->validationlibrary->validator();
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header');
-            $this->load->view('edit',$data);
-            $this->load->view('templates/footer');
-
+            $this->loaderFunction('edit',$data);
         } else {
             $this->pizzaModel->executeQuery($queryTerm);
             $this->getPizzas();
